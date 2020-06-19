@@ -1,0 +1,39 @@
+{% extends './base.html' %}
+{% block content %}
+<form method="post" class="form-validate" action="/account">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Create Account</h3>
+    <div class="col-md-12" style="padding: 3%;">        
+    <div class="form-group">
+        <label for="state">Customer Id (SSN ID)</label>
+        <select class="form-control"data-rule-mandatory="true" name="customer_id">            
+            <option value="">Select customer id..</option>            
+            {% if formData.customers %}
+            {% for customer in formData.customers %}
+                <option value="{{customer.id}}" {% if formData.postData and formData.postData.customer_id|int == customer.id|int %}selected="selected"{% endif %}>{{customer.id}} ({{customer.ssn_id}})</option>  
+            {% endfor %}            
+            {% endif %}
+        </select>
+  </div>
+  <div class="form-group">
+        <label for="account_type">Account Type</label>
+        <select class="form-control" data-rule-mandatory="true" name="account_type_id" id="account_type_id">
+            <option value="">Select account type..</option> 
+            {% if formData.account_type %}
+                {% for id,name in formData.account_type.items() %}
+                    <option value="{{id}}" {% if formData.postData and formData.postData.account_type_id|int == id|int %}selected="selected"{% endif %}>{{name}}</option>  
+                {% endfor %}             
+            {% endif %}
+        </select>
+  </div>
+  <div class="form-group">
+        <label for="amount">Deposit</label>
+        <input type="text" data-rule-digit="true" name="amount" class="form-control" 
+        id="amount" value="{% if formData.postData and formData.postData.amount %}{{formData.postData.amount}}{% endif %}" placeholder="Enter Amount">    
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>       
+    </div>
+</div>
+</form>
+
+{% endblock content %}

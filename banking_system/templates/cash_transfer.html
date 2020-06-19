@@ -1,0 +1,85 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 52% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+[rightshift]{
+    position: absolute;
+    right: 0;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet"/>
+<form method="post" id="form-validate" action="">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Transfer Amount</h3>
+    <div class="col-md-8" style="padding: 3%;">
+        <div class="form-group">
+            <label for="customer_id">Customer Id : </label> 
+            <label rightshift >{{formData.account_obj.customer_id}}</label>
+        </div>
+        <div class="form-group">
+            <label for="account_id">Account Id : </label> 
+            <label rightshift>{{formData.account_obj.id}}</label>
+        </div>
+        <div class="form-group">
+            <label for="account_id">Account Type : </label> 
+            <label rightshift> {% if formData.account_type_list and formData.account_type_list[formData.account_obj.account_type|string]%}
+            {{formData.account_type_list[formData.account_obj.account_type|string]}}{% else %}--------
+            {% endif %}</label>
+        </div>        
+        <div class="form-group">
+            <label for="account_id">Balance : </label> 
+            <label rightshift >{{formData.account_obj.amount}}</label>
+        </div>
+
+       {# cash action use to validate javscript validation #} 
+        <input type="hidden" id="balance" value="{{formData.account_obj.amount}}"/>
+        <input type="hidden" id="cash_action" value="transfer_amount"/>
+        <input type="hidden" id="source_account_id" value="{{formData.account_id}}"/>
+
+        <div class="form-group">
+                <label for="state">Transfer Account Id (Customer id) :</label>
+                <select data-rule-mandatory="true" class="form-control" name="transfer_account_id" id="transfer_account_id">
+                    {% if formData.accounts %}
+                    {% for account in formData.accounts %}
+                        {% if account.id|int != formData.account_id|int %}                                                            
+                             <option value="{{account.id}}">{{account.id}} ({{account.customer_id}})</option>  
+                        {% endif %}
+                    {% endfor %}            
+                    {% endif %}
+                </select>
+        </div> 
+
+        <div class="form-group">
+            <label for="account_id">Transfer Amount : </label> 
+            <input name="transfer_amount" class="form-control" id="transfer_amount" value=""/>
+
+            <label id="amount_error" class="validation-error-label" for="amount_error" style="display:none;">Please fill only digit and check enter amount is not greater then account amount</label>
+        </div>        
+        {# Withdraw , Deposit and Transfer Amount Button#}
+        <button type="button" class="btn btn-success" id="transfer" onclick="return opearationAmount(this.id);">Transfer</button>            
+
+        <button type="button" class="btn btn-warning" id="cancel" onclick="return window.history.back();">Cancel</button>                
+        </div>                 
+    </div>   
+
+    </div>
+</div>
+</form>
+<script>
+function opearationAmount(id){     
+    $('#form-validate').validate();   
+        if (validate_cash_transaction()){
+            var amount = $('#transfer_amount').val();
+            executeOperation(3,amount);
+        }        
+    }
+</script>
+{% endblock content %}

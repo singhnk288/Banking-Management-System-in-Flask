@@ -1,0 +1,148 @@
+.content{
+    z-index: 10; 
+    width: 40%;
+    margin: auto;   
+}
+
+.highlight{
+    background: antiquewhite;
+}
+
+ /* removes whitespace in dropdown from navbar */
+.dropdown-menu {
+padding: 0;
+float: right;
+left: 50% !important;
+right: auto !important;
+text-align: center !important;
+transform: translate(-50%, 0) !important;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+color: #FFF;
+}
+a:hover {
+text-decoration: none;
+color: #FFF;
+}
+a:active {
+text-decoration: none;
+color: #FFF;
+}
+
+a {
+transition: .3s ease;
+text-decoration: none
+}
+
+.dropdown-menu {
+    top: 100%;
+}
+
+.page-heading{
+    margin:auto;
+    text-align:center;
+    padding: 2%;
+    font-weight: 800;
+}
+
+.alert{
+    margin-top: -1.5%;
+}
+.form-check-inline {
+    display: inline-flex;
+    align-items: center;
+    padding-left: 0; 
+    margin-right: .75rem;
+}
+.form-check-input {
+    position: static;
+    margin-top: 0;
+    margin-right: .3125rem;
+    margin-left: 0;
+}
+.form-check-label {
+    margin-bottom: 0;
+}
+.form-check {
+    position: relative;
+    display: block;
+    padding-left: 1.25rem;
+}
+.float-left{
+    float:left;
+}
+.d-flex{
+    z-index: 1400;    
+}
+.loader{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;    
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Add animation to "page content" */
+  .animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+  }
+  
+  @-webkit-keyframes animatebottom {
+    from { bottom:-100px; opacity:0 }
+    to { bottom:0px; opacity:1 }
+  }
+  
+  @keyframes animatebottom {
+    from{ bottom:-100px; opacity:0 }
+    to{ bottom:0; opacity:1 }
+  }
+
+  #loader{
+      display:none;
+  }
+
+  .dropdown-menu{
+    padding: 6%;
+    margin: 0%;
+    font-size: initial;
+    background: antiquewhite;
+  }
+
+  .dropdown-menu>li>a:hover{
+    background: darkseagreen !important;
+    border-radius: 5px !important;
+  }
+ 

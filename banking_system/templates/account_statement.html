@@ -1,0 +1,136 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 82% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+</style>
+
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Account Statement</h3>
+    <div class="col-md-12" style="padding: 1%;">
+    <form method="post" class="form-validate" style="width: 30%;margin: auto;" action="{{url_for('account_statement')}}">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="state">Account Id (Customer id) :</label>
+                <select data-rule-mandatory="true" class="form-control" name="account_id" id="account_id">
+                    {% if formData.accounts %}
+                        {% for account in formData.accounts %}                                                                                  
+                            <option value="{{account.id}}" {% if formData.account_id and formData.account_id|int == account.id|int %}selected="selected"{% endif %}>{{account.id}} ({{account.customer_id}})</option>
+                        {% endfor %}            
+                    {% endif %}
+                </select>
+            </div>                     
+            <div class="form-group" style="width: 140%;">
+                <label class="radio-inline">
+                    <input type="radio" name="search_by" value="1" {% if formData.search_by and formData.search_by|int == 1 %}checked{% endif %} onclick="onChangeStatementType(this);">Last Number of Transactions
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="search_by" value="2" {% if formData.search_by and formData.search_by|int == 2 %}checked{% endif %} onclick="onChangeStatementType(this);">Start-End Dates
+                </label>
+            </div>
+            <div class="form-group" id="transaction_number">
+                <label for="transaction_number">Transaction Number :</label>
+                <select data-rule-mandatory="true" class="form-control" name="last_transaction_number" id="transaction_number">
+                    <option value="5" {% if formData.last_transaction_number and formData.last_transaction_number|int == 5 %}selected="selected"{% endif %}>5</option>
+                    <option value="10" {% if formData.last_transaction_number and formData.last_transaction_number|int == 10 %}selected="selected"{% endif %}>10</option>
+                    <option value="20" {% if formData.last_transaction_number and formData.last_transaction_number|int == 20 %}selected="selected"{% endif %}>20</option>
+                    <option value="50" {% if formData.last_transaction_number and formData.last_transaction_number|int == 50 %}selected="selected"{% endif %}>50</option>
+                </select>
+            </div>
+            <div class="form-group" id="startdate">
+                <div class="input-group" data-provide="startdate_input">
+                    <input type="text" data-rule-mandatory="true" readonly value="{% if formData.startdate %}{{formData.startdate}}{% endif %}" name="startdate" placeholder="Enter start date" class="form-control startdate_input" data-date-end-date="0d">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="enddate">
+                <div class="input-group" data-provide="enddate_input">
+                    <input type="text" data-rule-mandatory="true" readonly name="enddate" value="{% if formData.enddate %}{{formData.enddate}}{% endif %}" placeholder="Enter end date" class="form-control enddate_input" data-date-end-date="0d">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    {% if formData.account_transactions %}    
+        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm" style="width: 40%;">Transaction Id</th>
+                    <th class="th-sm">Description</th>
+                    <th class="th-sm">Date(YYYY-MM-DD)</th>
+                    <th class="th-sm">Amount</th>                                        
+                </tr>
+            </thead>
+            <tbody>   
+            {% if formData.account_transactions %}             
+                    {% for account_transaction in formData.account_transactions %}
+                        <tr>
+                            <td>{{account_transaction.transaction_id}}</td>
+                            <td>{{account_transaction.description}}</td>
+                            <td>{{account_transaction.created_at}}</td>
+                            <td>{{account_transaction.amount}}</td>
+                        </tr> 
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="4"> No Record Found</td></tr>
+                {% endif %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Trasaction Id</th>
+                    <th>Description</th>
+                    <th>Date(YYYY-MM-DD)</th>
+                    <th>Amount</th>                    
+                </tr>
+            </tfoot>
+        </table>        
+            <form method="post" class="form-validate" action="{{url_for('write_statement_into_excel')}}">
+                <input type="hidden" readonly name="enddate" value="{% if formData.enddate %}{{formData.enddate}}{% endif %}">
+                <input type="hidden" readonly name="account_id" value="{% if formData.account_id %}{{formData.account_id}}{% endif %}">
+                <input type="hidden" readonly name="startdate" value="{% if formData.startdate %}{{formData.startdate}}{% endif %}">
+                <input type="hidden" readonly name="search_by" value="{% if formData.search_by %}{{formData.search_by}}{% endif %}">
+                <input type="hidden" readonly name="last_transaction_number" value="{% if formData.last_transaction_number %}{{formData.last_transaction_number}}{% endif %}">
+                <button type="submit" class="btn btn-primary">Save As Excel</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+<script>
+
+function onChangeStatementType(element){
+    var selectValue = $(element).val();    
+    if(selectValue == 1){
+        $('#transaction_number').css('display','block');
+        $('#startdate').css('display','none');
+        $('#enddate').css('display','none');
+    }
+    else if(selectValue == 2){
+        $('#transaction_number').css('display','none');
+        $('#startdate').css('display','block');
+        $('#enddate').css('display','block');
+    }
+}
+onChangeStatementType($("input[name='search_by']:checked"));
+$('.startdate_input').datepicker({
+    format: 'dd/mm/yyyy',    
+    maxDate:"now",    
+});
+
+$('.enddate_input').datepicker({
+    format: 'dd/mm/yyyy',    
+    maxDate:"now",    
+});
+</script>
+{% endblock content %}

@@ -1,0 +1,69 @@
+{% extends './base.html' %}
+{% block content %}
+<form method="post" id="form-validate" enctype="multipart/form-data" action="/customer{% if formData.update_id %}/{{formData.update_id}}{% endif %}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Create Customer</h3>
+    <div class="col-md-12" style="padding: 3%;">
+        <div class="form-group">
+            <label for="customer_ssn">Customer SSN ID</label>
+            <input type="text" data-rule-numberssn="true" {% if formData.update_id %}disabled="true"{% endif %} name="customer_ssn_id" class="form-control" 
+            id="customer_ssn_id" value="{% if formData.postForm and formData.postForm.customer_ssn_id %}{{formData.postForm.customer_ssn_id}}{% endif %}" placeholder="Enter Customer SSN ID">    
+        </div>
+        <div class="form-group">
+            <label for="customer_name">Customer Name</label>
+            <input type="text" data-rule-requiredMinName2Max50="true" name="customer_name" class="form-control" 
+            value="{% if formData.postForm and formData.postForm.customer_name %}{{formData.postForm.customer_name}}{% endif %}" id="customer_name" placeholder="Enter Customer Name">    
+        </div>
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="text" data-rule-requiredAge="true" name="age" class="form-control" id="age" 
+            value="{% if formData.postForm and formData.postForm.age %}{{formData.postForm.age}}{% endif %}" placeholder="Enter Age">    
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea class="form-control" data-rule-addressLine1="true" name="address" class="form-control" 
+            id="address" placeholder="Enter Address" rows="3">{% if formData.postForm and formData.postForm.address %}{{formData.postForm.address}}{% endif %}</textarea>   
+        </div>
+    <div class="form-group">
+        <label for="state_id">State</label>
+        <select class="form-control" {% if formData.update_id %}disabled="true"{% endif %} name="state_id" id="state_id" onchange="change_city(this)" data-rule-mandatory="true">            
+            <option value="">Select state..</option>            
+            {% if formData.states %}
+                {% for state in formData.states %}
+                    <option value="{{state.id}}" {% if formData.postForm and formData.postForm.state_id|int == state.id %}
+                    selected="selected"
+                    {% endif %}>{{state.name}}</option>  
+                {% endfor %}
+            {% endif %}
+        </select>
+  </div>
+  <div class="form-group">
+        <label for="city_id">City</label>
+        <select class="form-control" {% if formData.update_id %}disabled="true"{% endif %} name="city_id" id="city_id" data-rule-mandatory="true">
+            <option value="">Select city..</option>
+            {% if formData.cities %}
+                {% for city in formData.cities %}
+                <option value="{{city.id}}" {% if formData.postForm and formData.postForm.city_id|int == city.id %}
+                selected="selected"
+                {% endif %}>{{city.name}}</option>  
+            {% endfor %}             
+            {% endif %}
+        </select>
+  </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    {% if not formData.update_id %}        
+        <button type="button" class="btn btn-primary" id="reset_create_customer" onclick="clearForm()">Reset</button>
+    {% endif %}    
+    </div>
+</div>
+</form>
+<script>
+function clearForm(){
+    $('#customer_ssn_id').val("");
+    $('#customer_name').val("");
+    $('#age').val("");
+    $('#address').val("");
+    $('#address').val("");
+}
+</script>
+{% endblock content %}

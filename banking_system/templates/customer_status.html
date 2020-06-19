@@ -1,0 +1,64 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 82% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+</style>
+<form method="post" class="form-validate" action="/customer{% if formData.update_id %}/{{formData.update_id}}{% endif %}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Customer Status</h3>
+    <div class="col-md-12" style="padding: 3%;">
+
+            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm">Customer Id</th>
+                    <th class="th-sm">Customer SSN ID</th>
+                    <th class="th-sm">Status</th>
+                    <th class="th-sm">Message</th>
+                    <th class="th-sm">Last Updated</th>
+                    <th class="th-sm">Operations</th>
+                    <th class="th-sm">View Profile</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if formData.customer_status %}
+                    {% for customer in formData.customer_status %}
+                        <tr>
+                            <td>{{customer.id}}</td>                            
+                            <td>{{customer.ssn_id}}</td>
+                            <td>{% if customer.status %}Active{% else %}--------{% endif %}</td>
+                            <td>{% if customer.message %}{{customer.message}}{% else %}---------{% endif %}</td>
+                            <td>{% if customer.updated_at %}{{customer.updated_at}}{% else %}---------{% endif %}</td>
+                            <td><a href="{{url_for(request.endpoint)}}">Refresh</a></td>
+                            <td><a href="/viewprofile/{{customer.id}}">View Profile</a></td>
+                        </tr> 
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="7"> No Record Found</td></tr>
+                {% endif %}                             
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Customer Id</th>
+                    <th>Customer SSN ID</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                    <th>Last Updated</th>
+                    <th>Operations</th>
+                    <th>View Profile</th>
+                </tr>
+            </tfoot>
+            </table>
+
+    </div>
+</div>
+</form>
+{% endblock content %}

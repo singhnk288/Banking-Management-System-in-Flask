@@ -1,0 +1,42 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 52% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+</style>
+<form method="post" class="form-validate" action="{{formData.post_url}}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Search Account</h3>
+    <div class="col-md-8" style="padding: 3%;">
+        <div class="form-group">
+            <label for="customer_id">Customer Id : </label> 
+            <input value="" class="form-control" name="customer_id" id="customer_id" data-rule-requiredSearch="true"/>
+        </div> 
+        {% if formData.account_type %}        
+            <div class="form-group">
+                <label for="customer_id">Account Type : </label> 
+                {% for id,account_type_name in formData.account_type.items() %}                                
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" {% if id|int == 1 %}checked{% endif %} type="radio" name="account_type" id="account_type_{{id}}" value="{{id}}">
+                        <label class="form-check-label" for="account_type_{{id}}">{{account_type_name}}</label>
+                    </div>  
+                {% endfor %}              
+            </div>          
+        {% endif %} 
+        <h3 style="text-align:center;">Or</h3>  
+        <div class="form-group" style="float:clear;">            
+            <label for="account_id">Account Id : </label> 
+            <input value="" class="form-control" name="account_id" id="account_id" data-rule-requiredSearch="true"/>        
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>       
+</div>
+</form>
+{% endblock content %}

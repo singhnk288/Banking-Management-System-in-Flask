@@ -1,0 +1,78 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 52% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+input{
+    position: absolute;
+    right: 0;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet"/>
+<form method="post" class="form-validate" action="/viewprofile{% if formData.update_id %}/{{formData.update_id}}{% endif %}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">View Customer Detail</h3>
+    <div class="col-md-8" style="padding: 3%;">
+         <div class="form-group">
+            <label for="customer_id">Customer ID : </label> 
+            <input value="{{formData.customer.id}}" disabled="true"/>
+        </div>
+        <div class="form-group">
+            <label for="customer_ssn">Customer SSN ID : </label> 
+            <input value="{{formData.customer.ssn_id}}" disabled="true"/>
+        </div>   
+        <div class="form-group">
+            <label for="customer_name">Customer Name : </label> 
+            <input value="{{formData.customer.name}}" disabled="true"/>
+        </div>
+        <div class="form-group">
+            <label for="age">Age : </label> 
+            <input value="{{formData.customer.age}}" disabled="true"/>
+        </div> 
+        <div class="form-group">
+            <label for="customer_address">Address : </label> 
+            <textarea class="form-control" data-rule-addressLine1="true" disabled="true" name="address" class="form-control" 
+                id="address" rows="3">{{formData.customer.address}}</textarea>   
+        </div> 
+        <input type="hidden" id="customer_delete_id" value="{{formData.update_id}}"/>
+        <button type="button" class="btn btn-success" onclick="redirect();">Update</button>              
+        <button type="button" class="btn btn-danger" id="delete" onclick="sweetPopup(this)">Delete</button>        
+        <button type="button" class="btn btn-primary" id="cancel" onclick="return window.history.back();">Cancel</button>        
+        </div>                 
+    </div>   
+
+    </div>
+</div>
+</form>
+<script>
+    function redirect(){
+        window.location.href = '/customer/{{formData.update_id}}';
+    }
+</script>
+<script>
+    function sweetPopup(element){
+        swal({
+                title: "Are you sure?",
+                text: "Your will not be able to recover this customer record!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+                },
+        function(){
+            delete_customer(element);
+        });
+           
+    }
+    
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+{% endblock content %}

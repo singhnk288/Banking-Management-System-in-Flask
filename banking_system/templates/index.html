@@ -1,0 +1,22 @@
+{% extends './base.html' %}
+{% block content %}
+<form method="post" class="form-validate" action="{{ url_for('home') }}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Login</h3>
+    <div class="col-md-12" style="padding: 3%;">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" data-rule-requiredMin2Max20="true" name="username" class="form-control" 
+        id="username" value="{% if formData.username %}{{formData.username}}{% endif %}" placeholder="Enter username">    
+    </div>    
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" data-rule-passwd="true" name="password" class="form-control" 
+        id="password" value="{% if formData.password %}{{formData.password}}{% endif %}" placeholder="Enter password">    
+    </div> 
+    <button type="submit" class="btn btn-primary">Login</button> 
+    <a href="{{url_for('create_account')}}" class="btn btn-success">Create a new account?</a>   
+    </div>
+</div>
+</form>
+{% endblock content %}

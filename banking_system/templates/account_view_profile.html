@@ -1,0 +1,88 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 52% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+[rightshift]{
+    position: absolute;
+    right: 0;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet"/>
+<form method="post" class="form-validate" action="/viewprofile{% if formData.update_id %}/{{formData.update_id}}{% endif %}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">View Account Detail</h3>
+    <div class="col-md-8" style="padding: 3%;">
+        <div class="form-group">
+            <label for="customer_id">Customer Id : </label> 
+            <label rightshift >{{formData.account_obj.customer_id}}</label>
+        </div>
+        <div class="form-group">
+            <label for="account_id">Account Id : </label> 
+            <label rightshift>{{formData.account_obj.id}}</label>
+        </div>
+        <div class="form-group">
+            <label for="account_id">Account Type : </label> 
+            <label rightshift> {% if formData.account_type_list and formData.account_type_list[formData.account_obj.account_type|string]%}
+            {{formData.account_type_list[formData.account_obj.account_type|string]}}{% else %}--------
+            {% endif %}</label>
+        </div>
+        <div class="form-group">
+            <label for="account_id">Balance : </label> 
+            <label rightshift >{{formData.account_obj.amount}}</label>
+        </div>
+
+        <input type="hidden" id="account_delete_id" value="{{formData.account_id}}"/>                    
+        <button type="button" class="btn btn-danger" id="delete" onclick="return sweetPopup(this);">Delete</button>  
+        {# Withdraw , Deposit and Transfer Amount Button #}
+        <button type="button" class="btn btn-success" id="withdraw" onclick="return withdrawAmount(this);">Withdraw</button>  
+        <button type="button" class="btn btn-success" id="deposit" onclick="return depositAmount(this);">Deposit</button>  
+        <button type="button" class="btn btn-success" id="transfer" onclick="return transferAmount(this);">Transfer</button>  
+
+        <button type="button" class="btn btn-warning" id="cancel" onclick="return window.history.back();">Cancel</button>                
+        </div>                 
+    </div>   
+
+    </div>
+</div>
+</form>
+
+<script>
+    function sweetPopup(element){
+        swal({
+                title: "Are you sure?",
+                text: "Your will not be able to recover this account record!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+                },
+        function(){
+            delete_account(element);
+        });
+           
+    }
+
+    //Withdraw function
+function withdrawAmount(element){
+    window.location.href = "/cash-withdraw/{{formData.account_id}}";
+}
+//deposit function
+function depositAmount(element){
+    window.location.href = "/cash-deposit/{{formData.account_id}}";
+}
+//transferAmount function
+function transferAmount(element){
+     window.location.href = "/cash-tranfer/{{formData.account_id}}";
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+.content{
+    width: 82% !important;
+}
+td a:visited{
+    color:blueviolet !important;
+}
+td a:hover{
+    color:#c1c117 !important;
+}
+</style>
+<form method="post" class="form-validate" action="/customer{% if formData.update_id %}/{{formData.update_id}}{% endif %}">
+<div class="row highlight" style="padding-top:2%;border-radius: 2%;">
+    <h3 class="page-heading">Customer Status</h3>
+    <div class="col-md-12" style="padding: 3%;">
+
+            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm">Customer Id</th>
+                    <th class="th-sm">Account Id</th>
+                    <th class="th-sm">Account Type</th>
+                    <th class="th-sm">Account Status</th>
+                    <th class="th-sm">Message</th>
+                    <th class="th-sm">Last Updated</th>
+                    <th class="th-sm">Refresh</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                {% if formData.account_status %}
+                    {% for account in formData.account_status %}
+                        <tr>
+                            <td>{{account.id}}</td>                            
+                            <td>{% if account.account_id %}{{account.account_id}}{% else %}----------{% endif %}</td>
+                            <td>{% if account.account_type and account.account_type|int == 1 %}Current{% elif account.account_type and account.account_type|int == 2 %}Saving{% else %}----------{% endif %}</td>
+                            <td>{% if account.status %}Active{% elif account.status %}Active{% else %}Pending{% endif %}</td>
+                            <td>{% if account.message %}{{account.message}}{% else %}---------{% endif %}</td>
+                            <td>{% if account.updated_at %}{{account.updated_at}}{% else %}---------{% endif %}</td>
+                            <td><a href="{{url_for(request.endpoint)}}">Refresh</a></td>
+                            {# <td><a href="/account-profile/{{account.id}}">View</a></td> #}
+                        </tr> 
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="7"> No Record Found</td></tr>
+                {% endif %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Customer Id</th>
+                    <th>Account Id</th>
+                    <th>Account Type</th>
+                    <th>Account Status</th>
+                    <th>Message</th>
+                    <th>Last Updated</th>
+                    <th>Refresh</th>                    
+                </tr>
+            </tfoot>
+            </table>
+
+    </div>
+</div>
+</form>
+{% endblock content %}
