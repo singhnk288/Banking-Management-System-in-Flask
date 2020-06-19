@@ -64,8 +64,8 @@ Change Configuration file:
     SQLALCHEMY_DATABASE_URI='mysql://admin:Admin@123@localhost:3306/banking-system'
     
  Import Sql file:
-  Go to : Banking-Management-System-in-Flask/bankingsystem.sql
-  Import table from bankingsystem.sql
+  Go to : Banking-Management-System-in-Flask/banking-system.sql
+  Import table from banking-system.sql
   
  
  ## Run Flask Project
